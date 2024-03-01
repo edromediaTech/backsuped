@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const Commune = require('../models/commune');
+const Ecole = require('../models/ecole');
 const sectionCommunaleSchema = new mongoose.Schema({
    commune: { type: mongoose.Schema.Types.ObjectId, ref: 'Commune', required: true },
    nom: { type: String, required: true },
+   ecoles:[{type: mongoose.Schema.Types.ObjectId, ref: 'Ecole'}],
    superficie: { type: Number, required: true },
    longitude: { type: Number, required: true },
    latitude: { type: Number, required: true },

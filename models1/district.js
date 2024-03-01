@@ -13,6 +13,7 @@ const districtSchema = new mongoose.Schema({
    altitude: { type: Number, required: true }
 });
 
+// ajoute le district dans le departement
 districtSchema.post('save', async function(doc, next) {
    try {
        await Departement.findByIdAndUpdate(
@@ -25,6 +26,26 @@ districtSchema.post('save', async function(doc, next) {
        next(error);
    }
 });
+
+// mis a jour le district dans le departement
+districtSchema.pre('findOneAndUpdate', function(next) {
+    this.set({ $set: { updatedAt: new Date() } }); // Exemple de mise à jour d'un champ
+    this._updateDepartement = this.getUpdate().departement; // Stocker la nouvelle valeur de département si elle est présente
+    next();
+  });
+
+// supprime le district dans le departement
+districtSchema.pre('findOneAndDelete', async function(next) {
+    const doc = await this.model.findOne(this.getFilter());
+    if (doc) {
+      const departementId = doc.departement;
+      // Supprimer la référence du district dans le document du département
+      await mongoose.model('Departement').findByIdAndUpdate(departementId, {
+        $pull: { districts: doc }
+      });
+    }
+    next();
+  });
 
 
 districtSchema.plugin(uniqueValidator);
