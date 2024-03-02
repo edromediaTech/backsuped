@@ -33,7 +33,7 @@ const ecoleSchema = new Schema({
     required: true
   },
   nom: { type: String, required: true },
-  code: { type: String, required: true, unique: true },
+  code: { type: String, required: true, unique: true }, // code 11 chiffres du ministere
   sigle: String,
   tel: String,
   telephone: String,
@@ -68,35 +68,35 @@ ecoleSchema.pre('findOneAndUpdate', function(next) {
       // Supprimer la référence de l'ancienne zone
       await mongoose.model('Zone').findByIdAndUpdate(docToUpdate.zone, { $pull: { ecoles: docToUpdate } });
       // Ajouter la référence à la nouvelle zone
-      await mongoose.model('Zone').findByIdAndUpdate(update.zone, { $addToSet: { ecoles: docToUpdate} });
+      await mongoose.model('Zone').findByIdAndUpdate(update.zone, { $addToSet: { ecoles: update} });
     }
 
     if (update.categorie && !docToUpdate.categorie.equals(update.categorie)) {
       // Supprimer la référence de l'ancienne categorie
       await mongoose.model('Categorie').findByIdAndUpdate(docToUpdate.categorie, { $pull: { ecoles: docToUpdate } });
       // Ajouter la référence à la nouvelle categorie
-      await mongoose.model('Categorie').findByIdAndUpdate(update.categorie, { $addToSet: { ecoles: docToUpdate} });
+      await mongoose.model('Categorie').findByIdAndUpdate(update.categorie, { $addToSet: { ecoles: update} });
     }
   
     if (update.vacation && !docToUpdate.vacation.equals(update.vacation)) {
       // Supprimer la référence de l'ancienne vacation
       await mongoose.model('Vacation').findByIdAndUpdate(docToUpdate.vacation, { $pull: { ecoles: docToUpdate } });
       // Ajouter la référence à la nouvelle vacation
-      await mongoose.model('Vacation').findByIdAndUpdate(update.vacation, { $addToSet: { ecoles: docToUpdate} });
+      await mongoose.model('Vacation').findByIdAndUpdate(update.vacation, { $addToSet: { ecoles: update} });
     }
   
     if (update.niveauenseignement && !docToUpdate.niveauenseignement.equals(update.niveauenseignement)) {
       // Supprimer la référence de l'ancienne niveauenseignement
       await mongoose.model('Niveauenseignement').findByIdAndUpdate(docToUpdate.niveauenseignement, { $pull: { ecoles: docToUpdate } });
       // Ajouter la référence à la nouvelle niveauenseignement
-      await mongoose.model('Niveauenseignement').findByIdAndUpdate(update.niveauenseignement, { $addToSet: { ecoles: docToUpdate} });
+      await mongoose.model('Niveauenseignement').findByIdAndUpdate(update.niveauenseignement, { $addToSet: { ecoles: update} });
     }
   
     if (update.sectionCommunale_id && !docToUpdate.sectionCommunale_id.equals(update.sectionCommunale)) {
       // Supprimer la référence de l'ancienne sectionCommunale
       await mongoose.model('SectionCommunale').findByIdAndUpdate(docToUpdate.sectionCommunale, { $pull: { ecoles: docToUpdate } });
       // Ajouter la référence à la nouvelle sectionCommunale
-      await mongoose.model('SectionCommunale').findByIdAndUpdate(update.sectionCommunale, { $addToSet: { ecoles: docToUpdate } });
+      await mongoose.model('SectionCommunale').findByIdAndUpdate(update.sectionCommunale, { $addToSet: { ecoles: update } });
     }
   
     next();

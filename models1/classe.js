@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
+const Niveau = require('../models/niveau');
 
 const classeSchema = new mongoose.Schema({
     nomclasse: {
         type: String,
-        required: true
+        required: true,
+        unique:true
     },
-    niveau_id: {
-        type: Number,
-        required: true
+    niveau: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Niveau' ,
+            required: true         
     }
 });
 
