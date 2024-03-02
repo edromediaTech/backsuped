@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Ecole = require('../models/ecole');
+const Ecole= require('../models/ecole');
 
 const niveauenseignementSchema = new mongoose.Schema({
   ecoles: [{
