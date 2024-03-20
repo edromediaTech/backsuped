@@ -1,53 +1,42 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-const Departement= require('./departement');
+const Departement= require('../models/departement');
 
 const userSchema = new mongoose.Schema({
    name: { type: String, required: true },
    departement: { type: mongoose.Schema.Types.ObjectId, ref: 'Departement', required: true },
    email: { type: String, required: true},
-   apiToken: { type: String, required: true },
-   userLevel: { type: Number, required: true },
+   apiToken: { type: String },
+   userLevel: { type: Number, default: 0},
    emailVerified: { type: Date, default: null },
    lastSeen: { type: Date, default: null },
    password: { type: String, required: true },
    rememberToken: { type: String, default: null }
 });
 
-// ajoute le user dans le departement
-userSchema.post('save', async function(doc, next) {
-   try {
-       await Departement.findByIdAndUpdate(
-           { _id: doc.departement }, // Assurez-vous que votre schéma user a un champ pour stocker l'ID du département
-           { $push: { users: doc } },
-           { new: true, useFindAndModify: false }
-       );
-       next();
-   } catch (error) {
-       next(error);
-   }
+// ajoute le commune dans le district
+userSchema.post('save', async function (doc, next) {
+  await mongoose.model('Departement').findByIdAndUpdate(doc.departement, { $addToSet: { users: doc } });
+  next();
 });
 
-// mis a jour le user dans le departement
+// mis a jour le commune dans le district
+
 userSchema.pre('findOneAndUpdate', function(next) {
     this.set({ $set: { updatedAt: new Date() } }); // Exemple de mise à jour d'un champ
     this._updateDepartement = this.getUpdate().departement; // Stocker la nouvelle valeur de département si elle est présente
     next();
   });
 
-// supprime le user dans le departement
-userSchema.pre('findOneAndDelete', async function(next) {
-    const doc = await this.model.findOne(this.getFilter());
-    if (doc) {
-      const departementId = doc.departement;
-      // Supprimer la référence du user dans le document du département
-      await mongoose.model('Departement').findByIdAndUpdate(departementId, {
-        $pull: { users: doc }
-      });
-    }
+
+// supprime une commune
+  userSchema.pre('deleteOne', { document: false, query: true }, async function(next) {
+    const doc = await this.model.findOne(this.getQuery());    
+    // Ici, vous pouvez effectuer des actions avant la suppression du document,
+    await mongoose.model('Departement').findByIdAndUpdate(doc.departement, { $pull: { users: doc._id } });
+   // comme supprimer des références dans d'autres collections.  
     next();
   });
-
 
 
 userSchema.plugin(uniqueValidator);

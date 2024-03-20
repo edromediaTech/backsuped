@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const Niveau = require('./niveau');
+const uniqueValidator = require('mongoose-unique-validator');
+const Niveau = require('../models/niveau');
 
 const classeSchema = new mongoose.Schema({
     nomclasse: {
@@ -14,6 +15,9 @@ const classeSchema = new mongoose.Schema({
     }
 });
 
+
+classeSchema.plugin(uniqueValidator);
+classeSchema.index({ "nomclasse": 1,"niveau":1}, { unique: true });
 const Classe = mongoose.model('Classe', classeSchema);
 
 module.exports = Classe;

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const Enseignant= require('./enseignant');
-const Ecole= require('./ecole');
+const uniqueValidator = require('mongoose-unique-validator');
+const Enseignant= require('../models/enseignant');
+const Ecole= require('../models/ecole');
 
 const ecoleEnseignantSchema = new mongoose.Schema({
     enseignant: {
@@ -19,6 +20,8 @@ const ecoleEnseignantSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+ecoleEnseignantSchema.plugin(uniqueValidator);
+ecoleEnseignantSchema.index({ "enseignant": 1,"ecole":1}, { unique: true });
 const EcoleEnseignant = mongoose.model('EcoleEnseignant', ecoleEnseignantSchema);
 
 module.exports = EcoleEnseignant;

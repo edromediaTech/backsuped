@@ -1,12 +1,9 @@
 const mongoose = require('mongoose');
-const Ecole = require('./ecole');
+const Ecole = require('../models/ecole');
 
 const vacationSchema = new mongoose.Schema({
-  ecoles: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Ecole'
-  }],
-  vacation: { type: String, required: true }
+  ecoles: [{type: mongoose.Schema.Types.ObjectId, ref: 'Ecole' }],
+  nom: { type: String, required: true, unique:true }
 });
 
 module.exports = mongoose.model('Vacation', vacationSchema);

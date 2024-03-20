@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const userCtrl = require('../controllers/user');
+const UserController = require('../controllers/user');
 
-router.post('/signup', userCtrl.signup);
-router.post('/login', userCtrl.login);
-router.get('/all', auth, userCtrl.getAllUser);
-router.get('/:id', auth, userCtrl.getOneUser);
-router.patch('/:id',auth, userCtrl.updateUser);
-// router.patch('/password/:id',auth, userCtrl.updatePassword);
-router.delete('/logout', userCtrl.logout);
-router.delete('/:id', userCtrl.deleteUser);
+router.post('/signup', UserController.signup);
+router.delete('/logout', UserController.logout);
+router.post('/login', UserController.login);
+router.post('/updateUserLevel', UserController.updateUserLevel);
+router.delete('/:id', UserController.deleteUser);
+router.put('/:id',auth, UserController.updateUser);
+router.get('/',auth, UserController.getAllUsers);
+router.get('/:id',auth, UserController.getOneUser);
+
 
 
 module.exports = router;

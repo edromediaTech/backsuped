@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Zone= require('./zone');
-const SectionCommunale= require('./sectionCommunale');
-const Categorie= require('./categorie');
-const Vacation= require('./vacation');
-const Niveauenseignement= require('./niveauenseignement');
+const Zone= require('../models/zone');
+const SectionCommunale= require('../models/sectionCommunale');
+const Categorie= require('../models/categorie');
+const Vacation= require('../models/vacation');
+const Niveauenseignement= require('../models/niveauenseignement');
 
 const ecoleSchema = new Schema({
   zone: {
@@ -33,17 +33,17 @@ const ecoleSchema = new Schema({
     required: true
   },
   nom: { type: String, required: true },
-  code: { type: String, required: true, unique: true }, // code 11 chiffres du ministere
+  code: { type: String }, // code 11 chiffres du ministere
   sigle: String,
   tel: String,
   telephone: String,
   email: { type: String, lowercase: true },
   adresse: String,
   acces: String,
-  secteur: { type: Number, min: 0, max: 255 }, // Utilise Number pour représenter tinyint
+  secteur: { type: Boolean }, // Utilise Number pour représenter tinyint
   milieu: { type: Boolean, default: false }, // Boolean pour milieu
-  location: { type: Number, min: 0, max: 255 }, // Utilise Number pour représenter tinyint
-  statut: { type: Number, min: 0, max: 255 }, // Utilise Number pour représenter tinyint, ajustez min et max selon vos besoins
+  location: { type: Number}, // Utilise Number pour représenter tinyint
+  statut: { type: Boolean}, // Utilise Number pour représenter tinyint, ajustez min et max selon vos besoins
   fondateur: String,
   latitude: Number,
   altitude: Number,
@@ -104,15 +104,25 @@ ecoleSchema.pre('findOneAndUpdate', function(next) {
   
 
 //supprimer 
-ecoleSchema.pre('remove', async function (next) {
-    const doc = this;
-    await mongoose.model('Zone').findByIdAndUpdate(doc.zone, { $pull: { ecoles: doc } });
-    await mongoose.model('Categorie').findByIdAndUpdate(doc.categorie, { $pull: { ecoles: doc } });
-    await mongoose.model('Vacation').findByIdAndUpdate(doc.vacation, { $pull: { ecoles: doc } });
-    await mongoose.model('Niveauenseignement').findByIdAndUpdate(doc.niveauenseignement, { $pull: { ecoles: doc } });
-    await mongoose.model('SectionCommunale').findByIdAndUpdate(doc.sectionCommunale, { $pull: { ecoles: doc._id } });
-    next();
-  });
+ecoleSchema.pre('deleteOne', { document: false, query: true }, async function(next) {
+  const doc = await this.model.findOne(this.getQuery());    
+  await mongoose.model('Zone').findByIdAndUpdate(doc.zone, { $pull: { ecoles: doc._id } });
+  await mongoose.model('Categorie').findByIdAndUpdate(doc.categorie, { $pull: { ecoles: doc._id } });
+  await mongoose.model('Vacation').findByIdAndUpdate(doc.vacation, { $pull: { ecoles: doc._id } });
+  await mongoose.model('Niveauenseignement').findByIdAndUpdate(doc.niveauenseignement, { $pull: { ecoles: doc._id } });
+  await mongoose.model('SectionCommunale').findByIdAndUpdate(doc.sectionCommunale, { $pull: { ecoles: doc._id } });
+  next();
+});
+
+// ecoleSchema.pre('deleteOne', async function (next) {
+//     const doc = this;
+//     await mongoose.model('Zone').findByIdAndUpdate(doc.zone, { $pull: { ecoles: doc._id } });
+//     await mongoose.model('Categorie').findByIdAndUpdate(doc.categorie, { $pull: { ecoles: doc._id } });
+//     await mongoose.model('Vacation').findByIdAndUpdate(doc.vacation, { $pull: { ecoles: doc._id } });
+//     await mongoose.model('Niveauenseignement').findByIdAndUpdate(doc.niveauenseignement, { $pull: { ecoles: doc._id } });
+//     await mongoose.model('SectionCommunale').findByIdAndUpdate(doc.sectionCommunale, { $pull: { ecoles: doc._id } });
+//     next();
+//   });
 
   // ajouter
   ecoleSchema.post('save', async function (doc, next) {

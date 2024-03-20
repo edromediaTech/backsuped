@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const Enseignant = require('./enseignant');
+const uniqueValidator = require('mongoose-unique-validator');
+const Enseignant = require('../models/enseignant');
 
 const funiversitaireSchema = new mongoose.Schema({
     nom: {
@@ -25,6 +26,8 @@ const funiversitaireSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+funiversitaireSchema.plugin(uniqueValidator);
+funiversitaireSchema.index({ "titre": 1,"enseignant":1}, { unique: true });
 const Funiversitaire = mongoose.model('Funiversitaire', funiversitaireSchema);
 
 module.exports = Funiversitaire;

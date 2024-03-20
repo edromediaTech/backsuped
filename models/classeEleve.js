@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-const Ecole = require('./ecole');
-const Eleve = require('./eleve');
-const Classe = require('./classe');
+const uniqueValidator = require('mongoose-unique-validator');
+const Ecole = require('../models/ecole');
+const Eleve = require('../models/eleve');
+const Classe = require('../models/classe');
 
 const classEleveSchema = new mongoose.Schema({
     ecole: {
@@ -20,8 +21,7 @@ const classEleveSchema = new mongoose.Schema({
         required: true
     },
     status: {
-        type: String,
-        required: true
+        type: String
     },
     anac: {
         type: String,
@@ -29,6 +29,8 @@ const classEleveSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+classEleveSchema.plugin(uniqueValidator);
+classEleveSchema.index({ "ecole": 1,"classe":1,"eleve":1}, { unique: true });
 const ClassEleve = mongoose.model('ClassEleve', classEleveSchema);
 
 module.exports = ClassEleve;

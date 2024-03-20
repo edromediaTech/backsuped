@@ -1,6 +1,8 @@
 const http = require('http');
-const app = require('./app');
+const socketIo = require('socket.io');
+require('dotenv/config');
 
+const app = require('./app');
 
 const normalizePort = val => {
   const port = parseInt(val, 10);
@@ -37,6 +39,15 @@ const errorHandler = error => {
 };
 
 const server = http.createServer(app);
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+  console.log('Un client est connecté');
+  // Vous pouvez définir d'autres événements ici
+  socket.on('userConnected', (data) => {
+    io.emit('notification', data);
+  });
+});
 
 server.on('error', errorHandler);
 server.on('listening', () => {

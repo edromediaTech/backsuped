@@ -23,7 +23,7 @@ const path = require('path');
 
 
 app.use(cors({
-  origin: ['http://localhost:3000','https://upnch.univ.ht','https://upga.univ.ht'],
+  origin: ['http://localhost:3000','http://192.168.1.116:3000', 'http://192.168.1.105:3000'],
   methods: '*',
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -37,31 +37,30 @@ app.use(session({
     cookie: { maxAge: oneDay },
     resave: false 
 }));
-app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use('/devoirs', express.static(path.join(__dirname, 'devoirs')));
-app.use('/actualites', express.static(path.join(__dirname, 'actualites')));
+// app.use('/images', express.static(path.join(__dirname, 'images')));
+// app.use('/devoirs', express.static(path.join(__dirname, 'devoirs')));
+// app.use('/actualites', express.static(path.join(__dirname, 'actualites')));
 
 
 //Recuperation des routes
 
+const departementRoutes = require('./routes/departement');
 const userRoutes = require('./routes/user');
 const anneeRoutes = require('./routes/annee');
-const contactRoutes = require('./routes/contact');
-const universiteRoutes = require('./routes/universite');
-const faculteRoutes = require('./routes/faculte');
-const etudiantRoutes = require('./routes/etudiant');
-const profRoutes = require('./routes/prof');
-const roleRoutes = require('./routes/role');
-const mailRoutes = require('./routes/mail');
-const matiereRoutes = require('./routes/matiere');
-const courRoutes = require('./routes/cour');
-const noteRoutes = require('./routes/note');
-const devoirRoutes = require('./routes/devoir');
-const ressourceRoutes = require('./routes/ressource');
-const optionRoutes = require('./routes/option');
-const actualiteRoutes = require('./routes/actualite');
-const commentRoutes = require('./routes/comment');
-const inscriptionRoutes = require('./routes/inscription');
+const zoneRoutes = require('./routes/zone');
+const ecoleRoutes = require('./routes/ecole');
+const districtRoutes = require('./routes/district');
+const directeurRoutes = require('./routes/directeur');
+const communeRoutes = require('./routes/commune');
+const sectionCommunaleRoutes = require('./routes/sectionCommunale');
+const categorieRoutes = require('./routes/categorie');
+const vacationRoutes = require('./routes/vacation');
+const groupeFormRoutes = require('./routes/groupeForm');
+const formRoutes = require('./routes/form');
+const niveauenseignementRoutes = require('./routes/niveauenseignement');
+const questionnaireRoutes = require('./routes/questionnaire');
+const optionQuestionRoutes = require('./routes/optionQuestion');
+
 
 mongoose.set("strictQuery", false);
 //connexion a  la base de donnees
@@ -87,23 +86,20 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', userRoutes);
 app.use('/api/annee', anneeRoutes);
-app.use('/api/faculte', faculteRoutes);
-
-app.use('/api/contact', contactRoutes);
-app.use('/api/universite', universiteRoutes);
-app.use('/api/etudiant', etudiantRoutes);
-app.use('/api/prof', profRoutes);
-app.use('/api/role', roleRoutes);
-app.use('/api/mail', mailRoutes);
-app.use('/api/matiere', matiereRoutes);
-app.use('/api/cour', courRoutes);
-app.use('/api/note', noteRoutes);
-app.use('/api/devoir', devoirRoutes);
-app.use('/api/ressource', ressourceRoutes);
-app.use('/api/option', optionRoutes);
-app.use('/api/actualite', actualiteRoutes);
-app.use('/api/comment', commentRoutes);
-app.use('/api/inscription', inscriptionRoutes);
+app.use('/api/zone', zoneRoutes);
+app.use('/api/ecole', ecoleRoutes);
+app.use('/api/departement', departementRoutes);
+app.use('/api/district', districtRoutes);
+app.use('/api/commune', communeRoutes);
+app.use('/api/categorie', categorieRoutes);
+app.use('/api/vacation', vacationRoutes);
+app.use('/api/directeur', directeurRoutes);
+app.use('/api/groupeForm', groupeFormRoutes);
+app.use('/api/form', formRoutes);
+app.use('/api/sectionCommunale', sectionCommunaleRoutes);
+app.use('/api/niveauenseignement', niveauenseignementRoutes);
+app.use('/api/questionnaire', questionnaireRoutes);
+app.use('/api/optionQuestion', optionQuestionRoutes);
 
 
 app.get('/',(req,res,next)=>{

@@ -1,32 +1,17 @@
 const mongoose = require('mongoose');
-const User= require('./user');
-const Ecole= require('./ecole');
+const uniqueValidator = require('mongoose-unique-validator');
+const Personnel= require('../models/personnel');
+const Ecole= require('../models/ecole');
 
 const responsableEcSchema = new mongoose.Schema({
-    ecole: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Ecole',
-        required: true
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    niveau: {
-        type: String,
-        required: true
-    },
-    valider: {
-        type: Number,
-        required: true
-    },
-    nif: {
-        type: String,
-        required: true
-    }
+    ecole: {type: mongoose.Schema.Types.ObjectId, ref: 'Ecole', required: true },
+    personnel: { type: mongoose.Schema.Types.ObjectId, ref: 'Personnel', required: true },
+    niveau: {type: String, required: true },
+    valider: { type: Boolean,  default: true },   
 }, { timestamps: true });
 
-const ResponsableEc = mongoose.model('ResponsableEc', responsableEcSchema);
+responsableEcSchema.plugin(uniqueValidator);
+responsableEcSchema.index({ "ecole": 1,"personnel":1, "niveau":1}, { unique: true });
+module.exports = mongoose.model('ResponsableEc', responsableEcSchema);
 
-module.exports = ResponsableEc;
+ 

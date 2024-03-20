@@ -1,15 +1,47 @@
+const Personnel = require('./models/personnel');
 const role = {
     "utilisateur":0,
-    "etudiant":1,
+    "eleve":1,
     "professeur":2,
-    "bibliothecaire":3,
-    "secretaire-fac":4,
-    "vice-doyen":5,
-    "doyen":6,
-    "secretaire":7,
-    "vice-recteur":8,    
-    "recteur":9,
-    "adm":10,
-    "supadm":11
+    "directeur":3,
+    "responsable":4,
+    "operateur":5,
+    "inspecteurZ":6,
+    "inspecteurP":7,
+    "inspecteurG":8,
+    "comptableA":9,
+    "comptable":10,
+    "administrateurC":11,
+    "directeurA":12,    
+    "directeurD":13,       
+    "admin":14,
+    "supAdmin":15
  }
-module.exports ={role}; 
+
+ async function checkIfPersonnelExists(id) {
+    const exists = await Personnel.exists({ user_id: id });
+    return exists;
+  }
+ 
+ async function verifyUserLevel(level, user){
+
+    let privilege = false
+    switch (level) {
+      case role.utilisateur:
+        privilege = true
+        break;
+      case role.operateur:
+        privilege = true
+        break;
+      case role.admin:
+        privilege = true
+        break;
+      default:
+        privilege = (await checkIfPersonnelExists(user) ? true : false)        
+    }
+
+    return privilege
+    
+ }
+
+module.exports ={role, verifyUserLevel}; 

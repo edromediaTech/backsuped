@@ -7,7 +7,7 @@ const anneeCtrl = require('../controllers/annee');
 
 //router.get('/', auth, stuffCtrl.getAllStuff);
 router.post('/',  anneeCtrl.createAnnee);
-router.delete('/:id', anneeCtrl.deleteAnnee);
+//router.delete('/:id', anneeCtrl.deleteAnnee);
 // router.get('/', auth, anneeCtrl.getAllAnnee);
 // router.get('/last', auth, anneeCtrl.getLastAnnee);
 
