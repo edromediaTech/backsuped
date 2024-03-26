@@ -37,7 +37,7 @@ exports.signup = async (req, res, next) => {
 
 
 exports.login = async (req, res, next) => {
- 
+  console.log("login")
   try {
       const url = req.headers.origin;
       const dept = await Departement.findOne({ url: url });
@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
               lastyear = y.nom;
           }
       }
-
+      
       const user = await User.findOne({ email: req.body.email, departement: dept });
       if (!user) {
           return res.status(401).json({ message: 'Paire login/mot de passe incorrecte' });
@@ -67,9 +67,9 @@ exports.login = async (req, res, next) => {
      
       // verifie le niveau de l´utilisateur
       const testUserLevel = await verifyUserLevel(user.userLevel, user._id);
-
+      
       await User.updateOne({ _id: user._id }, { lastSeen: new Date() });
-
+     
       res.status(200).json({
           userId: user._id,
           name: user.name,

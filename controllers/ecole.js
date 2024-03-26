@@ -1,6 +1,9 @@
 // controllers/ecole.js
-
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const Ecole = require('../models/ecole');
+const District = require('../models/district');
+
 const { log } = require('../utils/logger');
 
 exports.createEcole = async (req, res) => {
@@ -12,6 +15,42 @@ exports.createEcole = async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
+};
+
+
+// Méthode pour récupérer toutes les écoles d'un district par son ID
+exports.getEcolesByDistrict = async (req, res) => {
+  const districtId = req.params.districtId; // Supposons que l'ID du district est passé comme paramètre dans l'URL
+
+  District.aggregate([
+    { $match: { _id: ObjectId(districtId) } },
+    { $lookup: { 
+        from: "communes",
+        localField: "_id",
+        foreignField: "district",
+        as: "communes"
+    }},
+    { $unwind: "$communes" },
+    { $lookup: { 
+        from: "zones",
+        localField: "communes._id",
+        foreignField: "commune",
+        as: "zones"
+    }},
+    { $unwind: "$zones" },
+    { $lookup: { 
+        from: "ecoles",
+        localField: "zones._id",
+        foreignField: "zone",
+        as: "ecoles"
+    }},
+    { $unwind: "$ecoles" },
+    { $project: { _id: "$ecoles._id", nom: "$ecoles.nom", adresse: "$ecoles.adresse" } }
+  ]).then(ecoles => {
+    res.status(200).json(ecoles);
+  }).catch(error => {
+    res.status(500).json({ error });
+  });
 };
 
 exports.getAllEcoles = async (req, res) => {

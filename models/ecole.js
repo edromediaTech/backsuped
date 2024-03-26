@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 const Schema = mongoose.Schema;
 const Zone= require('../models/zone');
 const SectionCommunale= require('../models/sectionCommunale');
@@ -134,7 +135,8 @@ ecoleSchema.pre('deleteOne', { document: false, query: true }, async function(ne
     next();
   });
   
-
+ecoleSchema.plugin(uniqueValidator);
+ecoleSchema.index({ "zone": 1,"nom":1}, { unique: true });
 const Ecole = mongoose.model('Ecole', ecoleSchema);
 
 module.exports = Ecole;
