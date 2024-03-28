@@ -1,16 +1,10 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
-const Ecole = require('../models/ecole');
-const Eleve = require('../models/eleve');
+const Matiere = require('../models/matiere');
 const Classe = require('../models/classe');
 
 const classeMatiereSchema = new mongoose.Schema({
-    ecole: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Ecole',
-        required: true
-    },
-    matiere: {
+   matiere: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Matiere',
         required: true
@@ -20,14 +14,25 @@ const classeMatiereSchema = new mongoose.Schema({
         ref: 'Classe',
         required: true
     },
-    nbheure: {
-        type: Number
-    },
-   
+    nbheure: Number       
 }, { timestamps: true });
 
+// ajoute le classe matiere dans le classe
+classeMatiereSchema.post('save', async function (doc, next) {
+    await mongoose.model('Classe').findByIdAndUpdate(doc.classe, { $addToSet: { classeMatieres: doc } });
+    next();
+  });
+
+classeMatiereSchema.pre('deleteOne', { document: false, query: true }, async function(next) {
+    const doc = await this.model.findOne(this.getQuery());    
+    // Ici, vous pouvez effectuer des actions avant la suppression du document,
+    await mongoose.model('Classe').findByIdAndUpdate(doc.classe, { $pull: { classeMatieres: doc._id } });
+    // comme supprimer des références dans d'autres collections.  
+    next();
+  });
+
 classeMatiereSchema.plugin(uniqueValidator);
-classeMatiereSchema.index({ "ecole": 1,"classe":1,"matiere":1}, { unique: true });
+classeMatiereSchema.index({"classe":1,"matiere":1}, { unique: true });
 const ClasseMatiere = mongoose.model('ClasseMatiere', classeMatiereSchema);
 
 module.exports = ClasseMatiere;

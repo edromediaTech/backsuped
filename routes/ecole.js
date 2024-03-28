@@ -8,6 +8,8 @@ router.post('/', ecoleController.createEcole);
 router.post('/many', ecoleController.createEcoles);
 router.get('/', ecoleController.getAllEcoles);
 router.get('/:id', ecoleController.getEcoleById);
+router.get('/parzone/:zoneId', ecoleController.getEcolesByZone);
+router.get('/parcommune/:communeId', ecoleController.getEcolesByCommune);
 // router.get('/district/:id', ecoleController.getEcolesByDistrict);
 router.get('/:districtId/ecoles', ecoleController.getEcolesByDistrict);
 router.put('/:id', ecoleController.updateEcole);

@@ -3,7 +3,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 const Niveau = require('../models/niveau');
 
 const classeSchema = new mongoose.Schema({
-    nomclasse: {
+    nom: {
         type: String,
         required: true,
         unique:true
@@ -12,7 +12,8 @@ const classeSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Niveau' ,
             required: true         
-    }
+    },
+    classeMatieres:[{type: mongoose.Schema.Types.ObjectId, ref: 'ClasseMatiere'}]
 });
 
 

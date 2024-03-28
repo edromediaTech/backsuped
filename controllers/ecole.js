@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Ecole = require('../models/ecole');
 const District = require('../models/district');
+const Commune = require('../models/commune');
 
 const { log } = require('../utils/logger');
 
@@ -51,6 +52,44 @@ exports.getEcolesByDistrict = async (req, res) => {
   }).catch(error => {
     res.status(500).json({ error });
   });
+};
+
+
+exports.getEcolesByCommune = async (req, res) => {
+  const communeId = req.params.communeId; // Supposons que l'ID du district est passé comme paramètre dans l'URL
+
+  Commune.aggregate([
+    { $match: { _id: ObjectId(communeId) } },
+      { $lookup: { 
+        from: "zones",
+        localField: "communes._id",
+        foreignField: "commune",
+        as: "zones"
+    }},
+    { $unwind: "$zones" },
+    { $lookup: { 
+        from: "ecoles",
+        localField: "zones._id",
+        foreignField: "zone",
+        as: "ecoles"
+    }},
+    { $unwind: "$ecoles" },
+    { $project: { _id: "$ecoles._id", nom: "$ecoles.nom", adresse: "$ecoles.adresse" } }
+  ]).then(ecoles => {
+    res.status(200).json(ecoles);
+  }).catch(error => {
+    res.status(500).json({ error });
+  });
+};
+
+exports.getEcolesByZone = async (req, res) => {
+  try {
+    const zoneId = req.params.zoneId;
+    const ecoles = await Ecole.find({ zone: zoneId });
+    res.json(ecoles);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 exports.getAllEcoles = async (req, res) => {

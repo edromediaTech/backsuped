@@ -2,11 +2,13 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const Ecole = require('./ecole');
+const Niveauenseignement = require('./niveauenseignement');
 const Personnel = require('./personnel');
 
 const directeurEcSchema = new mongoose.Schema({
     personnel: { type: mongoose.Schema.Types.ObjectId, ref: 'Personnel', required: true },
-    ecole: { type: mongoose.Schema.Types.ObjectId, ref: 'Ecole', required: true },
+    niveauenseignement: { type: mongoose.Schema.Types.ObjectId, ref: 'Niveauenseignement' },
+    ecole: { type: mongoose.Schema.Types.ObjectId, ref: 'Ecole', required: true },    
     date_affectation: { type: Date, default: Date.now }
 });
 

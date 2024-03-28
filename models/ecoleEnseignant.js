@@ -15,9 +15,10 @@ const ecoleEnseignantSchema = new mongoose.Schema({
         required: true
     },
     statut :String,
-    date_Aff: {
-        type: Date
-    }
+    nbChaire :Number,
+    codeBud:String,
+    dateNommination: Date, 
+    dateAffectation: Date 
 }, { timestamps: true });
 
 ecoleEnseignantSchema.plugin(uniqueValidator);

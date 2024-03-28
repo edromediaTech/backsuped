@@ -51,7 +51,7 @@ const anneeRoutes = require('./routes/annee');
 const zoneRoutes = require('./routes/zone');
 const ecoleRoutes = require('./routes/ecole');
 const districtRoutes = require('./routes/district');
-const directeurRoutes = require('./routes/directeur');
+const directeurEcRoutes = require('./routes/directeurEc');
 const communeRoutes = require('./routes/commune');
 const sectionCommunaleRoutes = require('./routes/sectionCommunale');
 const categorieRoutes = require('./routes/categorie');
@@ -61,6 +61,12 @@ const formRoutes = require('./routes/form');
 const niveauenseignementRoutes = require('./routes/niveauenseignement');
 const questionnaireRoutes = require('./routes/questionnaire');
 const optionQuestionRoutes = require('./routes/optionQuestion');
+const niveauRoutes = require('./routes/niveau');
+const classeRoutes = require('./routes/classe');
+const classeMatiereRoutes = require('./routes/classeMatiere');
+const matiereRoutes = require('./routes/matiere');
+const responsableRoutes = require('./routes/responsable');
+const enseignantRoutes = require('./routes/enseignant');
 
 
 mongoose.set("strictQuery", false);
@@ -94,13 +100,19 @@ app.use('/api/district', districtRoutes);
 app.use('/api/commune', communeRoutes);
 app.use('/api/categorie', categorieRoutes);
 app.use('/api/vacation', vacationRoutes);
-app.use('/api/directeur', directeurRoutes);
+app.use('/api/directeurEc', directeurEcRoutes);
 app.use('/api/groupeForm', groupeFormRoutes);
 app.use('/api/form', formRoutes);
 app.use('/api/sectionCommunale', sectionCommunaleRoutes);
 app.use('/api/niveauenseignement', niveauenseignementRoutes);
 app.use('/api/questionnaire', questionnaireRoutes);
 app.use('/api/optionQuestion', optionQuestionRoutes);
+app.use('/api/classe', classeRoutes);
+app.use('/api/classeMatiere', classeMatiereRoutes);
+app.use('/api/matiere', matiereRoutes);
+app.use('/api/niveau', niveauRoutes);
+app.use('/api/responsable', responsableRoutes);
+app.use('/api/enseignant', enseignantRoutes);
 
 
 app.get('/',(req,res,next)=>{

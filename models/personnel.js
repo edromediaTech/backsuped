@@ -3,7 +3,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 const User= require('../models/user');
 
 const personnelSchema = new mongoose.Schema({
-    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    user: {type: mongoose.Schema.Types.ObjectId, ref: 'User', default:null},
     nom: { type: String, required: true },
     prenom: { type: String, required: true },
     adresse: { type: String },
@@ -19,7 +19,7 @@ const personnelSchema = new mongoose.Schema({
     sexe: { type: Boolean },
     date_naissance: { type: Date },
     telephone: { type: String },
-    type: { type: Number }
+    type: { type: Boolean, default:false }
 }, { timestamps: true });
 
 personnelSchema.plugin(uniqueValidator);
