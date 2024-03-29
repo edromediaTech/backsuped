@@ -13,7 +13,7 @@ exports.createClasseMatiere = async (req, res) => {
 // Read
 exports.getAllClasseMatieres = async (req, res) => {
     try {
-        const classeMatieres = await ClasseMatiere.find();
+        const classeMatieres = await ClasseMatiere.find().populate("classe").populate("matiere");
         res.json(classeMatieres);
     } catch (error) {
         res.status(500).json({ message: error.message });

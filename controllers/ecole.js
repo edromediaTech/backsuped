@@ -46,7 +46,11 @@ exports.getEcolesByDistrict = async (req, res) => {
         as: "ecoles"
     }},
     { $unwind: "$ecoles" },
-    { $project: { _id: "$ecoles._id", nom: "$ecoles.nom", adresse: "$ecoles.adresse" } }
+    { $project: { _id: "$ecoles._id", nom: "$ecoles.nom", 
+                  code: "$ecoles.code",
+                  telephone: "$ecoles.tel",
+                  email: "$ecoles.email", 
+                  adresse: "$ecoles.adresse" } }
   ]).then(ecoles => {
     res.status(200).json(ecoles);
   }).catch(error => {

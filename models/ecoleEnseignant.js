@@ -15,11 +15,26 @@ const ecoleEnseignantSchema = new mongoose.Schema({
         required: true
     },
     statut :String,
-    nbChaire :Number,
+    nbChaire :String,
     codeBud:String,
     dateNommination: Date, 
     dateAffectation: Date 
 }, { timestamps: true });
+
+// ajoute le classe matiere dans le classe
+ecoleEnseignantSchema.post('save', async function (doc, next) {
+    await mongoose.model('Enseignant').findByIdAndUpdate(doc.enseignant, { $addToSet: { ecoleEnseignants: doc } });
+    next();
+  });
+
+ecoleEnseignantSchema.pre('deleteOne', { document: false, query: true }, async function(next) {
+    const doc = await this.model.findOne(this.getQuery());    
+    // Ici, vous pouvez effectuer des actions avant la suppression du document,
+    await mongoose.model('Enseignant').findByIdAndUpdate(doc.enseignant, { $pull: { ecoleEnseignants: doc._id } });
+    // comme supprimer des références dans d'autres collections.  
+    next();
+  });
+
 
 ecoleEnseignantSchema.plugin(uniqueValidator);
 ecoleEnseignantSchema.index({ "enseignant": 1,"ecole":1}, { unique: true });

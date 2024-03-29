@@ -67,6 +67,7 @@ const classeMatiereRoutes = require('./routes/classeMatiere');
 const matiereRoutes = require('./routes/matiere');
 const responsableRoutes = require('./routes/responsable');
 const enseignantRoutes = require('./routes/enseignant');
+const ecoleEnseignantRoutes = require('./routes/ecoleEnseignant');
 
 
 mongoose.set("strictQuery", false);
@@ -113,6 +114,7 @@ app.use('/api/matiere', matiereRoutes);
 app.use('/api/niveau', niveauRoutes);
 app.use('/api/responsable', responsableRoutes);
 app.use('/api/enseignant', enseignantRoutes);
+app.use('/api/ecoleEnseignant', ecoleEnseignantRoutes);
 
 
 app.get('/',(req,res,next)=>{
