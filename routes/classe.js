@@ -6,5 +6,6 @@ const auth = require('../middleware/auth');
 const classeCtrl = require('../controllers/classe');
 
 router.get('/', classeCtrl.getAllClasse);
+router.get('/:classeId/matieres', classeCtrl.getMatieresByClasse);
 
 module.exports = router;

@@ -2,13 +2,16 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Ecole = require('../models/ecole');
+const Enseignant = require('../models/enseignant');
 const District = require('../models/district');
+const EcoleEnseignant = require('../models/ecoleEnseignant');
 const Commune = require('../models/commune');
+const Zone = require('../models/zone');
 
 const { log } = require('../utils/logger');
 
 exports.createEcole = async (req, res) => {
-  console.log(req.body)
+  
   try {
     const ecole = new Ecole(req.body);
     await ecole.save();
@@ -18,6 +21,58 @@ exports.createEcole = async (req, res) => {
   }
 };
 
+exports.getEcolesParCommune = async (req, res) => {
+  try {
+    const { communeId } = req.params; // Obtenez l'ID de la commune depuis les paramètres de la route
+
+    // Trouver toutes les zones appartenant à cette commune
+    const zones = await Zone.find({ commune: communeId }).select('_id');
+    const zoneIds = zones.map(zone => zone._id);
+
+    // Trouver toutes les écoles dans les zones trouvées
+    const ecoles = await Ecole.find({ zone: { $in: zoneIds } });
+    
+    res.json(ecoles);
+  } catch (error) {
+    res.status(500).send('Erreur serveur');
+  }
+};
+
+exports.getEnseignantsByEcole = async (req, res) => {
+  try {
+      const ecoleId = req.params.ecoleId;
+      const ecoleWithEnseignants = await Ecole.findById(ecoleId)
+          .populate({
+              path: 'ecoleEnseignants',
+              populate: {
+                  path: 'enseignant',
+                  model: 'Enseignant', // Assurez-vous que le nom du modèle est correct
+                  populate: {
+                    path: 'personnel',
+                    model: 'Personnel' // Assurez-vous que le nom du modèle est correct
+              }
+            }
+          })
+          .exec();
+
+      if (!ecoleWithEnseignants) {
+          return res.status(404).send('Ecole not found');
+      }
+     
+      // Transformation des données pour envoyer uniquement ce qui est nécessaire
+      const enseignants = ecoleWithEnseignants.ecoleEnseignants.map(ee => ({
+          ecoleEnseignantId: ee._id,
+          nom:ee.enseignant.personnel.nom +" " +ee.enseignant.personnel.prenom,
+          nif:ee.enseignant.personnel.nif, 
+          telephone:ee.enseignant.personnel.telephone, 
+
+      }));
+
+      res.json(enseignants);
+  } catch (error) {
+      res.status(500).send(error.message);
+  }
+};
 
 // Méthode pour récupérer toutes les écoles d'un district par son ID
 exports.getEcolesByDistrict = async (req, res) => {

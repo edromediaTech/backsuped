@@ -15,7 +15,7 @@ exports.createDirecteur = async (req, res) => {
         const directeur = await DirecteurEc.create({ personnel: personnel._id,niveauenseignement:pers.niveauenseignement,ecole:pers.ecole ,date_EFonction: pers.date_EFonction });
         res.status(201).json(directeur);
     } catch (error) {
-        console.log(error.message)
+        
         res.status(400).json({ message: error.message });
     }
 };

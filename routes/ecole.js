@@ -10,6 +10,9 @@ router.get('/', ecoleController.getAllEcoles);
 router.get('/:id', ecoleController.getEcoleById);
 router.get('/parzone/:zoneId', ecoleController.getEcolesByZone);
 router.get('/parcommune/:communeId', ecoleController.getEcolesByCommune);
+router.get('/:ecoleId/enseignants', ecoleController.getEnseignantsByEcole);
+router.get('/:communeId/ecoles', ecoleController.getEcolesParCommune);
+
 // router.get('/district/:id', ecoleController.getEcolesByDistrict);
 router.get('/:districtId/ecoles', ecoleController.getEcolesByDistrict);
 router.put('/:id', ecoleController.updateEcole);

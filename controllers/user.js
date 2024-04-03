@@ -37,7 +37,7 @@ exports.signup = async (req, res, next) => {
 
 
 exports.login = async (req, res, next) => {
-  console.log("login")
+  
   try {
       const url = req.headers.origin;
       const dept = await Departement.findOne({ url: url });

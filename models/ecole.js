@@ -6,6 +6,7 @@ const SectionCommunale= require('../models/sectionCommunale');
 const Categorie= require('../models/categorie');
 const Vacation= require('../models/vacation');
 const Niveauenseignement= require('../models/niveauenseignement');
+const EcoleEnseignant= require('../models/ecoleEnseignant');
 
 const ecoleSchema = new Schema({
   zone: {
@@ -44,6 +45,10 @@ const ecoleSchema = new Schema({
   secteur: { type: Boolean }, // Utilise Number pour représenter tinyint
   milieu: { type: Boolean, default: false }, // Boolean pour milieu
   location: { type: Number}, // Utilise Number pour représenter tinyint
+  ecoleEnseignants:[{
+    type: Schema.Types.ObjectId,
+    ref: 'EcoleEnseignant'    
+  }],
   statut: { type: Boolean}, // Utilise Number pour représenter tinyint, ajustez min et max selon vos besoins
   fondateur: String,
   latitude: Number,

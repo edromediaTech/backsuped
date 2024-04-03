@@ -16,7 +16,8 @@ exports.createEnseignant = async (req, res) => {
         const ecolesEnseignantData = req.body.ecolesEnseignantData.map(ecoleEnseignant => ({
             ...ecoleEnseignant,
             enseignant: enseignant._id // Ajout de l'ID de l'enseignant
-        }));       
+        }));  
+        console.log(ecolesEnseignantData)     
         await EcoleEnseignant.insertMany(ecolesEnseignantData);
         //const ecoleEnseignant = await EcoleEnseignant.create({ enseignant: enseignant._id,ecole:pers.ecole,statut:pers.statut ,dateAffectation: pers.dateAffectation });
         res.status(201).json(enseignant);

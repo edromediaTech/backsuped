@@ -17,11 +17,18 @@ const affectationSchema = new mongoose.Schema({
     nbheuref: {
         type: Number
     },
-    date_affectation: {
+    dateAffectation: {
         type: Date
     }
 }, { timestamps: true });
 
+// ajoute le affectation ecoleEnseignant
+affectationSchema.post('save', async function (doc, next) {
+    await mongoose.model('EcoleEnseignant').findByIdAndUpdate(doc.ecoleEnseignant, { $addToSet: { affectations: doc } });
+    await mongoose.model('ClasseMatiere').findByIdAndUpdate(doc.classeMatiere, { $addToSet: { affectations: doc } });
+    next();
+  });
+  
 
 affectationSchema.plugin(uniqueValidator);
 affectationSchema.index({ "ecoleEnseignant": 1,"classeMatiere":1}, { unique: true });

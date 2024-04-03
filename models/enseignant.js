@@ -13,7 +13,7 @@ const enseignantSchema = new mongoose.Schema({
     formations: [{type: mongoose.Schema.Types.ObjectId, ref: 'Formation'}],
     fsouhaitees: [{type: mongoose.Schema.Types.ObjectId, ref: 'Fsouhaitee'}],
     funiversites: [{type: mongoose.Schema.Types.ObjectId, ref: 'Funiversite'}],
-    ecoleEnseigants: [{type: mongoose.Schema.Types.ObjectId, ref: 'EcoleEnseignant'}]
+    ecoleEnseignants: [{type: mongoose.Schema.Types.ObjectId, ref: 'EcoleEnseignant'}]
 }, { timestamps: true });
 
 

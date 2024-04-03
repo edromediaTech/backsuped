@@ -15,7 +15,7 @@ exports.createResponsable = async (req, res) => {
         const responsable = await Responsable.create({ personnel: personnel._id,niveauenseignement:pers.niveauenseignement,ecole:pers.ecole });
         res.status(201).json(responsable);
     } catch (error) {
-        console.log(error.message)
+       
         res.status(400).json({ message: error.message });
     }
 };

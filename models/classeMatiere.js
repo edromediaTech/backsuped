@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const Matiere = require('../models/matiere');
 const Classe = require('../models/classe');
+const Affectation = require('../models/affectation');
 
 const classeMatiereSchema = new mongoose.Schema({
    matiere: {
@@ -14,6 +15,7 @@ const classeMatiereSchema = new mongoose.Schema({
         ref: 'Classe',
         required: true
     },
+    affactations: [{type: mongoose.Schema.Types.ObjectId, ref: 'Affectation'}],
     nbheure: Number       
 }, { timestamps: true });
 

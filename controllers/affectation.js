@@ -1,6 +1,7 @@
 const Affectation = require('../models/affectation');
 // Create
 exports.createAffectation = async (req, res) => {
+    console.log(req.body)
     try {
         const affectation = await Affectation.create(req.body);
         res.status(201).json(affectation);
