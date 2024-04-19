@@ -17,7 +17,7 @@ const ecoleEnseignantSchema = new mongoose.Schema({
         ref: 'Ecole',
         required: true
     },
-    affactations: [{type: mongoose.Schema.Types.ObjectId, ref: 'Affectation'}],
+    affectations: [{type: mongoose.Schema.Types.ObjectId, ref: 'Affectation'}],
     statut :String,
     nbChaire :String,
     codeBud:String,

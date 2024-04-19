@@ -4,6 +4,23 @@ const logger = require('./utils/logger');
 const jwt = require('jsonwebtoken');
 
 
+exports.classenivo = (nivo, tnivo) => {
+ 
+  let code = "0000"
+  let tabclasse=[]
+  for (i=0;i<4;i++){
+    let ind = nivo.substring(i,i+1)
+    if (ind ==="1"){
+      code[i]="1"
+      const niv = tnivo.map(n=>{n.code=code})
+      tabclasse = tabclasse.concat(niv[0].classe);
+      code = "0000"
+    }
+  }
+
+}
+
+
 exports.checkHaveChildren = (ob) => {
   const val = Object.values(ob._doc) 
   console.log(val)

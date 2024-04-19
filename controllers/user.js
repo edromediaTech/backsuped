@@ -136,6 +136,7 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.updateUser = async (req, res) => {
+  
     try {
         const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(200).json({ message: "Utilisateur mis à jour avec succès.", user: updatedUser });
@@ -157,8 +158,9 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.updateUserLevel = async (req, res) => {
+ 
   const { _id, userLevel } = req.body;
-  
+ 
   try {
     const user = await User.findByIdAndUpdate(_id, { userLevel: userLevel }, { new: true });
     

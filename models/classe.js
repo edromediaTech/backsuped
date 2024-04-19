@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const Niveau = require('../models/niveau');
+const ClasseEcole = require('../models/classeEcole');
 
 const classeSchema = new mongoose.Schema({
     nom: {
@@ -13,12 +14,13 @@ const classeSchema = new mongoose.Schema({
             ref: 'Niveau' ,
             required: true         
     },
-    classeMatieres:[{type: mongoose.Schema.Types.ObjectId, ref: 'ClasseMatiere'}]
+    classeMatieres:[{type: mongoose.Schema.Types.ObjectId, ref: 'ClasseMatiere'}],
+    classeEcoles:[{type: mongoose.Schema.Types.ObjectId, ref: 'ClasseEcole'}]
 });
 
 
 classeSchema.plugin(uniqueValidator);
-classeSchema.index({ "nomclasse": 1,"niveau":1}, { unique: true });
+classeSchema.index({ "nom": 1,"niveau":1}, { unique: true });
 const Classe = mongoose.model('Classe', classeSchema);
 
 module.exports = Classe;

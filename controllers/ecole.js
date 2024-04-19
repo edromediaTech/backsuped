@@ -7,6 +7,7 @@ const District = require('../models/district');
 const EcoleEnseignant = require('../models/ecoleEnseignant');
 const Commune = require('../models/commune');
 const Zone = require('../models/zone');
+// const Niveau = require('../models/niveau');
 
 const { log } = require('../utils/logger');
 
@@ -20,6 +21,19 @@ exports.createEcole = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+// exports.InitializeEcole = async (req, res) => {
+//   const ecole = await Ecole.findOne({_id: req.params.id}).populate("niveauenseignement")
+//   const nivo = ecole.niveauenseignement.codeNiveau
+//   const tnivo = await Niveau.find()
+//   try {
+//     const ecole = new Ecole(req.body);
+//     await ecole.save();
+//     res.status(201).json(ecole);
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// };
 
 exports.getEcolesParCommune = async (req, res) => {
   try {

@@ -8,7 +8,7 @@ const Personnel = require('../models/personnel');
 
 // Create
 exports.createEnseignant = async (req, res) => {
-    console.log(req.body)
+   console.log(req.body)
    try {
         const pers = req.body.enseignant;       
         const personnel = await Personnel.create({...pers});
@@ -17,12 +17,12 @@ exports.createEnseignant = async (req, res) => {
             ...ecoleEnseignant,
             enseignant: enseignant._id // Ajout de l'ID de l'enseignant
         }));  
-        console.log(ecolesEnseignantData)     
+           
         await EcoleEnseignant.insertMany(ecolesEnseignantData);
         //const ecoleEnseignant = await EcoleEnseignant.create({ enseignant: enseignant._id,ecole:pers.ecole,statut:pers.statut ,dateAffectation: pers.dateAffectation });
         res.status(201).json(enseignant);
     } catch (error) {
-        console.log(error.message)
+       
           res.status(400).json({ message: error.message });
     }
 };
