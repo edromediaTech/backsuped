@@ -2,6 +2,8 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const Ecole = require('../models/ecole');
+const Salle = require('../models/salle');
+const Classe = require('../models/classe');
 const Enseignant = require('../models/enseignant');
 const District = require('../models/district');
 const EcoleEnseignant = require('../models/ecoleEnseignant');
@@ -10,6 +12,7 @@ const Zone = require('../models/zone');
 // const Niveau = require('../models/niveau');
 
 const { log } = require('../utils/logger');
+const classeEcole = require('../models/classeEcole');
 
 exports.createEcole = async (req, res) => {
   
@@ -53,10 +56,10 @@ exports.getEcolesParCommune = async (req, res) => {
 };
 
 exports.getEnseignantsByEcole = async (req, res) => {
+  
   try {
       const ecoleId = req.params.ecoleId;
-      const ecoleWithEnseignants = await Ecole.findById(ecoleId)
-          .populate({
+      const ecoleWithEnseignants = await Ecole.findById(ecoleId).populate({
               path: 'ecoleEnseignants',
               populate: {
                   path: 'enseignant',
@@ -75,11 +78,10 @@ exports.getEnseignantsByEcole = async (req, res) => {
      
       // Transformation des données pour envoyer uniquement ce qui est nécessaire
       const enseignants = ecoleWithEnseignants.ecoleEnseignants.map(ee => ({
-          ecoleEnseignantId: ee._id,
+          ecoleEnseignantId: ee._id,          
           nom:ee.enseignant.personnel.nom +" " +ee.enseignant.personnel.prenom,
           nif:ee.enseignant.personnel.nif, 
-          telephone:ee.enseignant.personnel.telephone, 
-
+          telephone:ee.enseignant.personnel.telephone,         
       }));
 
       res.json(enseignants);
@@ -166,8 +168,15 @@ exports.getEcolesByZone = async (req, res) => {
 };
 
 exports.getAllEcoles = async (req, res) => {
+  
   try {
-    const ecoles = await Ecole.find();
+    const ecoles = await Ecole.find().
+    populate({
+      path: 'classeEcoles',
+      populate: { path: 'salles', model: 'Salle'},
+      populate: { path: 'classe', model: 'Classe'},
+  })
+    
     res.json(ecoles);
   } catch (error) {
     res.status(500).json({ message: error.message });

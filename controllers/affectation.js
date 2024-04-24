@@ -6,6 +6,8 @@ exports.createAffectation = async (req, res) => {
       const newAffectation = new Affectation({
         ecoleEnseignant,
         classeMatiere,
+        salle,
+        anac,
         nbheuref,
         dateAffectation
       });

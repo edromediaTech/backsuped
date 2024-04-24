@@ -37,6 +37,15 @@ exports.getAllEnseignants = async (req, res) => {
     }
 };
 
+exports.getAllEnseignantsCount = async (req, res) => {
+    try {
+        const enseignants = await Enseignant.find().populate('personnel');
+        res.json({nbEnseignant:enseignants.length});
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // Update
 exports.updateEnseignant = async (req, res) => {
     try {
