@@ -24,7 +24,7 @@ const path = require('path');
 
 
 app.use(cors({
-  origin: ['http://localhost:3000','http://192.168.1.116:3000', 'http://192.168.1.105:3000'],
+  origin: ['http://localhost:3000','http://192.168.1.116:3000', 'https://ddene.onrender.com'],
   methods: '*',
   allowedHeaders: ['Content-Type', 'Authorization']
 }));

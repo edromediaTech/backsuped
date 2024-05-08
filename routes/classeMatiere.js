@@ -7,9 +7,9 @@ const classeMatiereCtrl = require('../controllers/classeMatiere');
 
 // 3. Définir les routes
 
-router.post('/', classeMatiereCtrl.createClasseMatiere);
-router.get('/', classeMatiereCtrl.getAllClasseMatieres);
-router.put('/:id', classeMatiereCtrl.updateClasseMatiere);
-router.delete('/:id', classeMatiereCtrl.deleteClasseMatiere);
+router.post('/',auth, classeMatiereCtrl.createClasseMatiere);
+router.get('/',auth, classeMatiereCtrl.getAllClasseMatieres);
+router.put('/:id',auth, classeMatiereCtrl.updateClasseMatiere);
+router.delete('/:id',auth, classeMatiereCtrl.deleteClasseMatiere);
 
 module.exports = router;

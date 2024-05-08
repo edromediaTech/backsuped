@@ -5,7 +5,8 @@ const auth = require('../middleware/auth');
 //const multer = require('../middleware/multer-config');
 const classeCtrl = require('../controllers/classe');
 
-router.get('/', classeCtrl.getAllClasse);
-router.get('/:classeId/matieres', classeCtrl.getMatieresByClasse);
+
+router.get('/',auth, classeCtrl.getAllClasse);
+router.get('/:classeId/matieres',auth, classeCtrl.getMatieresByClasse);
 
 module.exports = router;

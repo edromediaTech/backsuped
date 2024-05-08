@@ -12,6 +12,8 @@ router.get('/parzone/:zoneId', ecoleController.getEcolesByZone);
 //router.get('/parcommune/:communeId', ecoleController.getEcolesByCommune);
 router.get('/:ecoleId/enseignants', ecoleController.getEnseignantsByEcole);
 router.get('/:communeId/ecoles', ecoleController.getEcolesParCommune);
+router.get('/ecoped/count', ecoleController.getEcoleCountPerDistrict);
+
 
 // router.get('/district/:id', ecoleController.getEcolesByDistrict);
 router.get('/:districtId/district', ecoleController.getEcolesByDistrict);

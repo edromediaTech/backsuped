@@ -6,13 +6,49 @@ const Salle = require('../models/salle');
 const Classe = require('../models/classe');
 const Enseignant = require('../models/enseignant');
 const District = require('../models/district');
+const Departement= require('../models/departement');
 const EcoleEnseignant = require('../models/ecoleEnseignant');
 const Commune = require('../models/commune');
 const Zone = require('../models/zone');
+const SectionCommunale = require('../models/sectionCommunale');
 // const Niveau = require('../models/niveau');
 
 const { log } = require('../utils/logger');
 const classeEcole = require('../models/classeEcole');
+
+
+exports.getEcoleCountPerDistrict = async (req, res) => {
+ 
+  try {
+    
+    const url = req.headers.origin;
+    const dept = await Departement.findOne({ url: url });
+    const departementId = dept._id; // L'ID du département est passé dans la requête
+    const departement = await Departement.findById(departementId).populate({
+      path: 'districts',
+      populate: {
+        path: 'communes',
+        populate: {
+          path: 'sectionCommunales',
+          populate: {
+            path: 'ecoles'
+          }
+        }
+      }
+    });
+
+    const results = departement.districts.map(district => ({
+      districtName: district.nom,
+      ecoleCount: district.communes.reduce((sum, commune) => sum + commune.sectionCommunales.reduce((sumSec, section) => sumSec + section.ecoles.length, 0), 0)
+    }));
+
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 
 exports.createEcole = async (req, res) => {
   
