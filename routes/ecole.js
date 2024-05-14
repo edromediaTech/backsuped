@@ -13,6 +13,7 @@ router.get('/parzone/:zoneId', ecoleController.getEcolesByZone);
 router.get('/:ecoleId/enseignants', ecoleController.getEnseignantsByEcole);
 router.get('/:communeId/ecoles', ecoleController.getEcolesParCommune);
 router.get('/ecoped/count', ecoleController.getEcoleCountPerDistrict);
+//router.get('/ecoles/full', ecoleController.getEcoleFull);
 
 
 // router.get('/district/:id', ecoleController.getEcolesByDistrict);

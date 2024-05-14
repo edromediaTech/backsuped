@@ -17,6 +17,34 @@ const { log } = require('../utils/logger');
 const classeEcole = require('../models/classeEcole');
 
 
+// exports.getEcoleFull = async (req, res) => {
+//   try {
+//       const ecoles = await Ecole.find()
+//                                 .populate({
+//                                     path: 'sectionCommunale',
+//                                     populate: {
+//                                         path: 'commune',
+//                                         populate: {
+//                                             path: 'district'
+//                                         }
+//                                     }
+//                                 });
+     
+//       const ecolesFull = ecoles.map(ecole => ({
+//           ...ecole,      
+//           communeId: ecole.sectionCommunale.commune._id,        
+//           districtId: ecole.sectionCommunale.commune.district._id,
+         
+//       }));
+
+//       res.json(ecolesFull);
+//   } catch (error) {
+//       res.status(500).send({ message: error.message });
+//   }
+// };
+
+
+
 exports.getEcoleCountPerDistrict = async (req, res) => {
  
   try {
