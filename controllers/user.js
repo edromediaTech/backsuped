@@ -41,7 +41,7 @@ exports.login = async (req, res, next) => {
   try {
       const url = req.headers.origin;
       const dept = await Departement.findOne({ url: url });
-      console.log(url)
+    
       const annee = await Annee.find();
       let pg_year = 0;
       let lastyear = '';

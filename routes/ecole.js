@@ -15,10 +15,11 @@ router.get('/:communeId/ecoles', ecoleController.getEcolesParCommune);
 router.get('/ecoped/count', ecoleController.getEcoleCountPerDistrict);
 //router.get('/ecoles/full', ecoleController.getEcoleFull);
 
-
 // router.get('/district/:id', ecoleController.getEcolesByDistrict);
 router.get('/:districtId/district', ecoleController.getEcolesByDistrict);
 router.put('/:id', ecoleController.updateEcole);
+router.put('/:id/coordonnees', ecoleController.updateEcoleCoordinates);
+
 router.delete('/:id', ecoleController.deleteEcole);
 
 module.exports = router;

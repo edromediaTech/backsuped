@@ -154,6 +154,7 @@ exports.getEnseignantsByEcole = async (req, res) => {
   }
 };
 
+
 // Méthode pour récupérer toutes les écoles d'un district par son ID
 exports.getEcolesByDistrict = async (req, res) => {
   const districtId = req.params.districtId; // Supposons que l'ID du district est passé comme paramètre dans l'URL
@@ -197,7 +198,7 @@ exports.getEcolesByDistrict = async (req, res) => {
 exports.getEcolesByCommune = async (req, res) => {
   const communeId = req.params.communeId; // Supposons que l'ID du district est passé comme paramètre dans l'URL
 
-  Commune.aggregate([
+  communes.aggregate([
     { $match: { _id: ObjectId(communeId) } },
       { $lookup: { 
         from: "zones",
@@ -232,18 +233,56 @@ exports.getEcolesByZone = async (req, res) => {
 };
 
 exports.getAllEcoles = async (req, res) => {
-  
   try {
-    const ecoles = await Ecole.find().
-    populate({
-      path: 'classeEcoles',
-      populate: { path: 'salles', model: 'Salle'},
-      populate: { path: 'classe', model: 'Classe'},
-  })
-    
-    res.json(ecoles);
+      const ecoles = await Ecole.find()
+          .populate({
+              path: 'sectionCommunale',
+              populate: { path: 'commune', model: 'Commune' }
+          })
+          .populate({
+              path: 'classeEcoles',
+              populate: [
+                  { path: 'salles', model: 'Salle' },
+                  { path: 'classe', model: 'Classe' }
+              ]
+          })
+          .exec();
+
+      const ecolesWithCommuneId = ecoles.map(ecole => {
+          return {
+              ...ecole.toObject(),
+              commune: ecole.sectionCommunale.commune
+          };
+      });
+
+      res.json(ecolesWithCommuneId);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateEcoleCoordinates = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const { latitude, longitude } = req.body;
+
+      const updatedEcole = await Ecole.findByIdAndUpdate(
+          id,
+          {
+              $set: {
+                  latitude: latitude,
+                  longitude: longitude                 
+              }
+          },
+          { new: true, runValidators: true }
+      );
+      if (!updatedEcole) {
+          return res.status(404).json({ message: 'École non trouvée' });
+      }
+
+      res.json(updatedEcole);
+  } catch (err) {
+      res.status(400).json({ message: err.message });
   }
 };
 
