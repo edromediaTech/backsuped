@@ -263,6 +263,7 @@ exports.getAllEcoles = async (req, res) => {
 
 exports.updateEcoleCoordinates = async (req, res) => {
   try {
+      console.log("coordonnees")
       const { id } = req.params;
       const { latitude, longitude } = req.body;
 
@@ -280,7 +281,7 @@ exports.updateEcoleCoordinates = async (req, res) => {
           return res.status(404).json({ message: 'École non trouvée' });
       }
 
-      res.json(updatedEcole);
+      res.status(201).json(updatedEcole);
   } catch (err) {
       res.status(400).json({ message: err.message });
   }
