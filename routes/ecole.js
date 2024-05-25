@@ -6,6 +6,7 @@ const ecoleController = require('../controllers/ecole');
 
 router.post('/', ecoleController.createEcole);
 router.post('/many', ecoleController.createEcoles);
+router.post('/coordonnees', ecoleController.updateEcoleCoordinates);
 router.get('/', ecoleController.getAllEcoles);
 router.get('/:id', ecoleController.getEcoleById);
 router.get('/parzone/:zoneId', ecoleController.getEcolesByZone);
@@ -18,7 +19,6 @@ router.get('/ecoped/count', ecoleController.getEcoleCountPerDistrict);
 // router.get('/district/:id', ecoleController.getEcolesByDistrict);
 router.get('/:districtId/district', ecoleController.getEcolesByDistrict);
 router.put('/:id', ecoleController.updateEcole);
-router.put('/:id/coordonnees', ecoleController.updateEcoleCoordinates);
 
 router.delete('/:id', ecoleController.deleteEcole);
 

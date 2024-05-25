@@ -262,28 +262,19 @@ exports.getAllEcoles = async (req, res) => {
 };
 
 exports.updateEcoleCoordinates = async (req, res) => {
+  
   try {
-      console.log("coordonnees")
-      const { id } = req.params;
-      const { latitude, longitude } = req.body;
-
-      const updatedEcole = await Ecole.findByIdAndUpdate(
-          id,
-          {
-              $set: {
-                  latitude: latitude,
-                  longitude: longitude                 
-              }
-          },
-          { new: true, runValidators: true }
-      );
-      if (!updatedEcole) {
-          return res.status(404).json({ message: 'École non trouvée' });
-      }
-
-      res.status(201).json(updatedEcole);
-  } catch (err) {
-      res.status(400).json({ message: err.message });
+    const { _id, latitude, longitude } = req.body;
+    console.log(req.body)
+    const ecole = await Ecole.findByIdAndUpdate({_id:_id}, { latitude: latitude, longitude:longitude }, { new: true });
+    
+    if (!ecole) {      
+      return res.status(404).send('ecole not found');
+    }
+    
+    res.status(201).send(ecole);
+  } catch (error) {
+    res.status(400).send(error.message);
   }
 };
 
