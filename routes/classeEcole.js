@@ -6,5 +6,7 @@ const auth = require('../middleware/auth');
 
 // Route pour créer une nouvelle association ClasseEcole
 router.post('/',auth, classeEcoleController.createClasseEcole);
+router.get('/:ecoleId/classes', classeEcoleController.getClassesAndSallesByEcole);
+
 
 module.exports = router;

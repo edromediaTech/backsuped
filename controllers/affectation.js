@@ -1,8 +1,9 @@
 const Affectation = require('../models/affectation');
 // Create
 exports.createAffectation = async (req, res) => {
+   
     try {
-      const { ecoleEnseignant, classeMatiere, nbheuref, dateAffectation } = req.body;
+      const { ecoleEnseignant, classeMatiere, nbheuref, salle,anac, dateAffectation } = req.body;
       const newAffectation = new Affectation({
         ecoleEnseignant,
         classeMatiere,
@@ -16,6 +17,7 @@ exports.createAffectation = async (req, res) => {
   
       res.status(201).json(savedAffectation);
     } catch (error) {
+        
       res.status(400).json({ message: error.message });
     }
   };

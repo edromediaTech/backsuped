@@ -14,3 +14,21 @@ exports.createClasseEcole = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+exports.getClassesAndSallesByEcole = async (req, res) => {
+    try {
+        const { ecoleId } = req.params;
+
+        const classesEcole = await ClasseEcole.find({ ecole: ecoleId })
+            .populate('classe')
+            .populate('salles');
+
+        if (!classesEcole || classesEcole.length === 0) {
+            return res.status(404).json({ message: 'Aucune classe trouvée pour cette école' });
+        }
+
+        res.json(classesEcole);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
