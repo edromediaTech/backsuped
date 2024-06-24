@@ -38,6 +38,6 @@ affectationSchema.post('save', async function (doc, next) {
   
 
 affectationSchema.plugin(uniqueValidator);
-affectationSchema.index({ "ecoleEnseignant": 1,"classeMatiereSalle":1}, { unique: true });
+affectationSchema.index({ "ecoleEnseignant": 1,"classeMatiere":1}, { unique: true });
 const Affectation = mongoose.model('Affectation', affectationSchema);
 module.exports = Affectation;
